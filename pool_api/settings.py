@@ -37,12 +37,16 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    # 3rd-party apps
+    "rest_framework",
+    "corsheaders",
     # Local
     'accounts.apps.AccountsConfig',
     'pools.apps.PoolsConfig',
 ]
 
 MIDDLEWARE = [
+    "corsheaders.middleware.CorsMiddleware", # Added
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -51,6 +55,13 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:3000",
+    "http://localhost:8000",
+]
+
+CSRF_TRUSTED_ORIGINS = ["http://localhost:3000"]
 
 ROOT_URLCONF = 'pool_api.urls'
 
