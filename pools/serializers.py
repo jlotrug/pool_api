@@ -25,3 +25,13 @@ class PoolSerializer(serializers.ModelSerializer):
     def update(self, instance, validated_data):
         print(instance.league)
         return super().update(instance, validated_data)
+
+class LeagueSerializer(serializers.ModelSerializer):
+    class Meta:
+        fields = (
+            "id",
+            "league_name",
+            "user",
+            "code",
+        )
+        model = League
