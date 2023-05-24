@@ -35,3 +35,25 @@ class LeagueSerializer(serializers.ModelSerializer):
             "code",
         )
         model = League
+
+class GameSerializer(serializers.ModelSerializer):
+    class Meta:
+        fields = (
+            "id",
+            "team_one",
+            "team_two",
+            "winner",
+            "pool",
+        )
+        model = Game
+
+class PickSerializer(serializers.ModelSerializer):
+    class Meta:
+        fields = (
+            "id",
+            "user",
+            "choice",
+            "correct", 
+            "game",
+        )
+        model = Pick
