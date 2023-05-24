@@ -20,7 +20,7 @@ class PoolDetail(generics.RetrieveUpdateDestroyAPIView):
 
 class LeagueList(generics.ListCreateAPIView):
     # print("Hello League")
-    # permission_classes = (IsAuthorOrReadOnly,)
+    permission_classes = (IsAuthorOrReadOnly,)
     queryset = League.objects.all()
     serializer_class = LeagueSerializer
 
