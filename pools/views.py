@@ -19,9 +19,14 @@ class PoolDetail(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = PoolSerializer
 
 class LeagueList(generics.ListCreateAPIView):
-    # print("Hello League")
     permission_classes = (IsAuthorOrReadOnly,)
-    queryset = League.objects.all()
+    
+    def get_queryset(self):
+        user = self.request.user
+        queryset = League.objects.filter(user=user)
+        return queryset
+
+    # queryset = League.objects.all()
     serializer_class = LeagueSerializer
 
 class LeagueDetail(generics.RetrieveUpdateDestroyAPIView):
