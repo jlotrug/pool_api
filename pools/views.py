@@ -9,7 +9,13 @@ from rest_framework_simplejwt.views import TokenObtainPairView
 
 class PoolList(generics.ListCreateAPIView):
     permission_classes = (IsAuthorOrReadOnly,)
-    queryset = Pool.objects.all()
+
+    def get_queryset(self):
+        searchLeague  = self.request.query_params['leagueid']
+        print(searchLeague)
+        queryset = Pool.objects.filter(league = searchLeague)
+        return queryset
+    
     serializer_class = PoolSerializer
 
 
@@ -26,7 +32,6 @@ class LeagueList(generics.ListCreateAPIView):
         queryset = League.objects.filter(user=user)
         return queryset
 
-    # queryset = League.objects.all()
     serializer_class = LeagueSerializer
 
 class LeagueDetail(generics.RetrieveUpdateDestroyAPIView):
