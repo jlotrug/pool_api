@@ -34,6 +34,9 @@ class GameCard(models.Model):
     wins = models.IntegerField(default=0)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     pool = models.ForeignKey(Pool, on_delete=models.CASCADE)
-    
+
+class UserLeague(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    league = models.ForeignKey(League, on_delete=models.CASCADE)
 
 

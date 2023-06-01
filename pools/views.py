@@ -18,9 +18,7 @@ class PoolList(generics.ListCreateAPIView):
             queryset = Pool.objects.filter(league = searchLeague)
         else:
             searchLeague  = self.request.query_params['leaguecode']
-            print(searchLeague)
-            league = League.objects.get(code=searchLeague)
-            
+            league = League.objects.get(code=searchLeague)  
             queryset = Pool.objects.filter(league = league)
         return queryset
     
