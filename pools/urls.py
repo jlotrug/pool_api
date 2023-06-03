@@ -1,5 +1,5 @@
 from django.urls import path, include
-from .views import PoolList, PoolDetail, LeagueList, GameList, GameDetail
+from .views import PoolList, PoolDetail, LeagueList, GameList, GameDetail, PickDetail,PickList, PickCheckRetrieve
 from rest_framework_simplejwt.views import (
     TokenObtainPairView,
     TokenRefreshView,
@@ -14,5 +14,8 @@ urlpatterns = [
     path("pools/", PoolList.as_view(), name="pool_list"),
     path("games/", GameList.as_view(), name="game_list"),
     path("games/<int:pk>/", GameDetail.as_view(), name="game_detail"),
-    path("leagues/", LeagueList.as_view(), name='league_list')
+    path("leagues/", LeagueList.as_view(), name='league_list'),
+    path("pick-check/", PickCheckRetrieve.as_view(), name = "pick-check"),
+    path("picks/<int:pk>/", PickDetail.as_view(), name="pick_detail"),
+    path("picks/", PickList.as_view(), name="pick_list"),
 ]

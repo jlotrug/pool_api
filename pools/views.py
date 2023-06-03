@@ -87,14 +87,35 @@ class PickList(generics.ListCreateAPIView):
     serializer_class = PickSerializer
 
 class PickDetail(generics.RetrieveUpdateDestroyAPIView):
+    print("Hello")
     permission_classes = (IsAuthorOrReadOnly,)
-    queryset = Pick.objects.all()
     serializer_class = PickSerializer
+    queryset = Pick.objects.all()
+
+    def get_object(self):
+        if(self.request.query_params.get('game', False)):
+            searchPick = self.request.query_params['game']
+            print("PICKKKKKKKK", searchPick)
+            if Pick.objects.filter(game = searchPick, user=self.request.user).exists():
+                return Pick.objects.get(game = searchPick, user=self.request.user)
+            
+        # else:
+        return super().get_object()
+        
+
+        # queryset = Pick.objects.all()
+        # serializer_class = PickSerializer
 
 class PickCheckRetrieve(generics.ListAPIView):
     permission_classes = (IsAuthorOrReadOnly,)
+    serializer_class = PickSerializer
 
-    def get_quertset(self, request, *args, **kwargs):
-        print("Self Retrieve: ", request.query_params.get('game', False))
+    def get_queryset(self, *args, **kwargs):
+        print("Self Retrieve: ", self.request.query_params.get('game', False))
+        if(self.request.query_params.get('game', False)):
+            searchPick = self.request.query_params['game']
+            print("PICKKKKKKKK", searchPick)
+            if Pick.objects.filter(game = searchPick, user=self.request.user).exists():
+                return Pick.objects.filter(game = searchPick, user=self.request.user)
 
     queryset = Game.objects.all()
