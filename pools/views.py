@@ -1,11 +1,24 @@
 from django.shortcuts import render
+from django.http import HttpResponse
 from rest_framework import generics
 
-from .models import Pool, Pick, Game, League
+from .models import Pool, Pick, Game, League, UserLeague, PoolUser
+from accounts.models import CustomUser
+from accounts.serializers import UserDetailsSerializer
 from .permissions import IsAuthorOrReadOnly
-from .serializers import PoolSerializer, LeagueSerializer, GameSerializer, PickSerializer
+from .serializers import PoolSerializer, LeagueSerializer, GameSerializer, PickSerializer, PoolUserSerializer
 
 from rest_framework_simplejwt.views import TokenObtainPairView
+
+class PlayerList(generics.ListCreateAPIView):
+    permission_classes = (IsAuthorOrReadOnly,)
+    serializer_class = UserDetailsSerializer
+
+    def get_queryset(self):
+        pool_id = self.request.query_params['poolid']
+        pool = Pool.objects.get(id=pool_id)
+
+        return pool.players
 
 class PoolList(generics.ListCreateAPIView):
     permission_classes = (IsAuthorOrReadOnly,)
@@ -18,7 +31,9 @@ class PoolList(generics.ListCreateAPIView):
             queryset = Pool.objects.filter(league = searchLeague)
         else:
             searchLeague  = self.request.query_params['leaguecode']
-            league = League.objects.get(code=searchLeague)  
+            league = League.objects.get(code=searchLeague)
+            if len(UserLeague.objects.filter(league=league, user=self.request.user)) < 1:
+                UserLeague.objects.create(league=league, user=self.request.user)  
             queryset = Pool.objects.filter(league = league)
         return queryset
     
@@ -29,6 +44,13 @@ class PoolDetail(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = (IsAuthorOrReadOnly,)
     queryset = Pool.objects.all()
     serializer_class = PoolSerializer
+
+class UserLeagues(generics.ListCreateAPIView):
+    permission_classes = (IsAuthorOrReadOnly,)
+    serializer_class = LeagueSerializer
+
+    def get_queryset(self):
+        return self.request.user.leagues
 
 class LeagueList(generics.ListCreateAPIView):
     permission_classes = (IsAuthorOrReadOnly,)
@@ -60,12 +82,30 @@ class GameList(generics.ListCreateAPIView):
     serializer_class = GameSerializer
 
 class GameDetail(generics.RetrieveUpdateDestroyAPIView):
-    print("Reach Game Details")
     permission_classes = (IsAuthorOrReadOnly,)
     queryset = Game.objects.all()
     serializer_class = GameSerializer
 
+class PoolUserCreate(generics.CreateAPIView):
+    permission_classes = (IsAuthorOrReadOnly,)
+    serializer_class = PoolUserSerializer
+
+    def create(self, request, *args, **kwargs):
+        if len(PoolUser.objects.filter(pool=request.data['pool'], user=self.request.user)) < 1:
+            return super().create(request, *args, **kwargs)
+        else:
+            return HttpResponse()
+
 class PickList(generics.ListCreateAPIView):
+
+    # def create(self, request, *args, **kwargs):
+    #     game_id = request.data['game']
+    #     game = Game.objects.get(id=game_id)
+    #     pool = game.pool
+    #     if len(PoolUser.objects.filter(pool=pool, user=self.request.user)) < 1:
+    #         PoolUser.objects.create(pool=pool, user=self.request.user)  
+
+    #     return super().create(request, *args, **kwargs)
 
     def get_queryset(self, *args, **kwargs):
         if(self.request.query_params.get('game', False)):

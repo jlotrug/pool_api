@@ -13,6 +13,7 @@ class Pool(models.Model):
     pool_name = models.CharField(max_length=50, blank=False)
     league = models.ForeignKey(League, on_delete=models.CASCADE)
     winner = models.ForeignKey(settings.AUTH_USER_MODEL, blank=True, null=True, on_delete=models.DO_NOTHING)
+    players = models.ManyToManyField(settings.AUTH_USER_MODEL , through='PoolUser', related_name='players')
 
     def __str__(self):
         return self.pool_name
@@ -38,5 +39,9 @@ class GameCard(models.Model):
 class UserLeague(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     league = models.ForeignKey(League, on_delete=models.CASCADE)
+
+class PoolUser(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    pool = models.ForeignKey(Pool, on_delete=models.CASCADE)
 
 
