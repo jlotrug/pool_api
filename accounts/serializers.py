@@ -33,5 +33,6 @@ class UserDetailsSerializer(UserDetailsSerializer, serializers.ModelSerializer):
         fields = [
             "id",
             "first_name",
+            "last_name"
         ]
         model = CustomUser
