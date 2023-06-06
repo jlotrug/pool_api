@@ -135,10 +135,16 @@ class PickDetail(generics.RetrieveUpdateDestroyAPIView):
 class PickCheckRetrieve(generics.ListAPIView):
     permission_classes = (IsAuthorOrReadOnly,)
     serializer_class = PickSerializer
+    
 
     def get_queryset(self, *args, **kwargs):
+        print("Reach Query")
+        print(self.request.query_params)
         if(self.request.query_params.get('game', False)):
             searchPick = self.request.query_params['game']
+            if self.request.query_params.get('player', False):
+                searchUser = self.request.query_params['player']
+                return Pick.objects.filter(game=searchPick, user=searchUser)
             if Pick.objects.filter(game = searchPick, user=self.request.user).exists():
                 return Pick.objects.filter(game = searchPick, user=self.request.user)
 
