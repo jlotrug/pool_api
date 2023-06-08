@@ -1,7 +1,7 @@
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework import serializers
 # from django.contrib.auth import get_user_model
-from .models import Pool, Game, Pick, League, PoolUser
+from .models import Pool, Game, Pick, League, PoolUser, GameCard
 # from accounts.models import CustomUser
 
 
@@ -66,3 +66,13 @@ class PoolUserSerializer(serializers.ModelSerializer):
             "pool"
         )
         model = PoolUser
+
+class GameCardSerializer(serializers.ModelSerializer):
+    class Meta:
+        fields = (
+            "id",
+            "wins",
+            "user",
+            "pool",
+        )
+        model = GameCard

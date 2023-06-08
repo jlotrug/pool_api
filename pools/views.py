@@ -2,11 +2,11 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from rest_framework import generics
 
-from .models import Pool, Pick, Game, League, UserLeague, PoolUser
+from .models import Pool, Pick, Game, League, UserLeague, PoolUser, GameCard
 from accounts.models import CustomUser
 from accounts.serializers import UserDetailsSerializer
 from .permissions import IsAuthorOrReadOnly
-from .serializers import PoolSerializer, LeagueSerializer, GameSerializer, PickSerializer, PoolUserSerializer
+from .serializers import PoolSerializer, LeagueSerializer, GameSerializer, PickSerializer, PoolUserSerializer, GameCardSerializer
 
 from rest_framework_simplejwt.views import TokenObtainPairView
 
@@ -149,3 +149,28 @@ class PickCheckRetrieve(generics.ListAPIView):
                 return Pick.objects.filter(game = searchPick, user=self.request.user)
 
     queryset = Game.objects.all()
+
+class GameCardList(generics.ListCreateAPIView):
+    permission_classes = (IsAuthorOrReadOnly,)
+    serializer_class = GameCardSerializer
+
+    def get_queryset(self):
+        pool_id = self.request.query_params['poolid']
+        pool = Pool.objects.get(id=pool_id)
+        players = pool.players.all()
+        games = Game.objects.filter(pool=pool)
+
+        for player in players:
+            total = 0
+            for game in games:
+                if len(Pick.objects.filter(game=game, user=player)) < 1:
+                    continue
+                pick = Pick.objects.get(game=game, user=player)
+                if pick.choice == game.winner:
+                    total += 1
+            if len(GameCard.objects.filter(user=player, pool=pool)) > 0:
+                old_card = GameCard.objects.get(user=player, pool=pool)
+                old_card.delete()
+            GameCard.objects.create(user=player, pool=pool, wins=total)
+
+        return GameCard.objects.filter(pool=pool)
