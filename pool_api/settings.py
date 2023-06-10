@@ -165,9 +165,10 @@ CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
     "http://localhost:8000",
     "https://football-pool.herokuapp.com",
+    ".herokuapp.com",
 ]
 
-CSRF_TRUSTED_ORIGINS = ["http://localhost:3000", "https://football-pool.herokuapp.com"]
+CSRF_TRUSTED_ORIGINS = ["http://localhost:3000", "https://football-pool.herokuapp.com", ".herokuapp.com"]
 
 ROOT_URLCONF = 'pool_api.urls'
 
