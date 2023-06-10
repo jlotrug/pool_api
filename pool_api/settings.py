@@ -167,7 +167,7 @@ CORS_ALLOWED_ORIGINS = [
     "https://football-pool.herokuapp.com",
 ]
 
-CSRF_TRUSTED_ORIGINS = ["http://localhost:3000"]
+CSRF_TRUSTED_ORIGINS = ["http://localhost:3000", "https://football-pool.herokuapp.com"]
 
 ROOT_URLCONF = 'pool_api.urls'
 
@@ -197,8 +197,15 @@ WSGI_APPLICATION = 'pool_api.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
+# DATABASES = {
+#     'default': env.dj_db_url("DATABASE_URL")
+# }
+
 DATABASES = {
-    'default': env.dj_db_url("DATABASE_URL")
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+    }
 }
 
 
