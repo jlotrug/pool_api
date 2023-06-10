@@ -68,11 +68,15 @@ class PoolUserSerializer(serializers.ModelSerializer):
         model = PoolUser
 
 class GameCardSerializer(serializers.ModelSerializer):
+    player_first_name = serializers.CharField(source='user.first_name')
+    player_last_name = serializers.CharField(source='user.last_name')
     class Meta:
         fields = (
             "id",
             "wins",
             "user",
             "pool",
+            "player_first_name",
+            "player_last_name",
         )
         model = GameCard
