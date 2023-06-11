@@ -33,6 +33,7 @@ DEBUG = env.bool("DEBUG", default=False)
 ALLOWED_HOSTS = [".herokuapp.com", "localhost", "127.0.0.1", "https://football-pool.herokuapp.com", "http://football-pool.herokuapp.com"]
 # ALLOWED_HOSTS=['*']
 # CORS_ORIGIN_ALLOW_ALL = True
+CORS_ALLOW_HEADERS = ['*']
 
 # Application definition
 
@@ -151,8 +152,8 @@ SIMPLE_JWT = {
 }
 
 MIDDLEWARE = [
-    'whitenoise.middleware.WhiteNoiseMiddleware',
     "corsheaders.middleware.CorsMiddleware", # Added
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
