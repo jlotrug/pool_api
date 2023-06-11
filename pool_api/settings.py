@@ -30,8 +30,9 @@ SECRET_KEY = env.str("SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env.bool("DEBUG", default=False)
 
-ALLOWED_HOSTS = [".herokuapp.com", "localhost", "127.0.0.1", "https://football-pool.herokuapp.com"]
-
+# ALLOWED_HOSTS = [".herokuapp.com", "localhost", "127.0.0.1", "https://football-pool.herokuapp.com", "http://football-pool.herokuapp.com"]
+ALLOWED_HOSTS=['*']
+CORS_ORIGIN_ALLOW_ALL = True
 
 # Application definition
 
@@ -161,16 +162,17 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-CORS_ALLOW_CREDENTIALS = True
+# CORS_ALLOW_CREDENTIALS = True
 
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3000",
-    "http://localhost:8000",
-    "https://football-pool.herokuapp.com",
-    ".herokuapp.com",
-]
+# CORS_ALLOWED_ORIGINS = [
+#     "http://localhost:3000",
+#     "http://localhost:8000",
+#     "https://football-pool.herokuapp.com",
+#     "http://football-pool.herokuapp.com",
+#     ".herokuapp.com",
+# ]
 
-CSRF_TRUSTED_ORIGINS = ["http://localhost:3000", "https://football-pool.herokuapp.com", ".herokuapp.com"]
+CSRF_TRUSTED_ORIGINS = ["http://localhost:3000", "https://football-pool.herokuapp.com", ".herokuapp.com", "http://football-pool.herokuapp.com"]
 
 ROOT_URLCONF = 'pool_api.urls'
 
